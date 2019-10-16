@@ -1,0 +1,306 @@
+﻿@model Tuple<List<Category>, List<Book>>
+
+@{
+    ViewBag.Title = "Home";
+}
+
+@{
+    string category = null;
+    string mainC = null;
+    if (Model.Item2 != null)
+    {
+        category = Model.Item2.ElementAt(0).Category.Name;
+        if (Model.Item2.ElementAt(0).Category.CategorySubCategoryOf!=null)
+        {
+            mainC = Model.Item2.ElementAt(0).Category.CategorySubCategoryOf.Name;
+        }
+    }
+
+    ViewBag.Title = category;
+}
+
+<div class="wrapper-area">
+    <!--[if lt IE 8]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <!-- Add your site or application content here -->
+    <!-- Inner Page Banner Area Start Here -->
+    <div class="inner-page-banner-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="breadcrumb-area">
+                        <h1>@category</h1>
+                        <ul>
+                            <li><a href="#">Home</a> /</li>
+                            @if (mainC != null)
+                            {
+                                <li><a href="#">@mainC</a> /</li>
+                            }
+                            <li>@category</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Inner Page Banner Area End Here -->
+    <!-- Shop Page Area Start Here -->
+    <div class="shop-page-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <div class="sidebar hidden-after-desk">
+                        <h2 class="title-sidebar">SHOP BY CATEGORY</h2>
+                        <div class="category-menu-area sidebar-section-margin" id="category-menu-area">
+                            <ul>
+                                @foreach (Category c in Model.Item1)
+                                {
+
+                                    if (c.SubCategoryOf != null)
+                                    {
+                                        continue;
+                                    }
+
+                                    <li>
+                                        <a href="@Url.Action("Products","Home", new { id=c.ID })"><i class="flaticon-reload"></i>@c.Name<span><i class="flaticon-next"></i></span></a>
+                                        <ul class="dropdown-menu">
+                                            @{
+                                                List<Category> sc = new List<Category>();
+                                                sc = Model.Item1.FindAll(m => m.SubCategoryOf == c.ID);
+                                            }
+                                            @foreach (Category sub in sc)
+                                            {
+                                                <li><a href="@Url.Action("Products","Home", new { id=sub.ID })">@sub.Name</a></li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        <h2 class="title-sidebar">BEST SELLING</h2>
+                        <div class="best-products sidebar-section-margin">
+                            <div class="media">
+                                <a href="#" class="pull-left">
+                                    <img alt="Media Object" src="~/Content/img/sidebar/1.jpg" class="img-responsive">
+                                </a>
+                                <div class="media-body">
+                                    <h3 class="media-heading"><a href="#">Product Title Here</a></h3>
+                                    <p><span>$99</span>$85</p>
+                                </div>
+                            </div>
+                            <div class="media">
+                                <a href="#" class="pull-left">
+                                    <img alt="Media Object" src="~/Content/img/sidebar/2.jpg" class="img-responsive">
+                                </a>
+                                <div class="media-body">
+                                    <h3 class="media-heading"><a href="#">Product Title Here</a></h3>
+                                    <p>$85</p>
+                                </div>
+                            </div>
+                            <div class="media">
+                                <a href="#" class="pull-left">
+                                    <img alt="Media Object" src="~/Content/img/sidebar/3.jpg" class="img-responsive">
+                                </a>
+                                <div class="media-body">
+                                    <h3 class="media-heading"><a href="#">Product Title Here</a></h3>
+                                    <p><span>$99</span>$85</p>
+                                </div>
+                            </div>
+                            <div class="media">
+                                <a href="#" class="pull-left">
+                                    <img alt="Media Object" src="~/Content/img/sidebar/4.jpg" class="img-responsive">
+                                </a>
+                                <div class="media-body">
+                                    <h3 class="media-heading"><a href="#">Product Title Here</a></h3>
+                                    <p><span>$99</span>$85</p>
+                                </div>
+                            </div>
+                        </div>
+                        <h2 class="title-sidebar">Product Tags</h2>
+                        <div class="product-tags sidebar-section-margin">
+                            <ul>
+                                <li><a href="#">@category</a></li>
+                                <li><a href="#">Books</a></li>
+                                <li><a href="#">Authors</a></li>
+                                <li><a href="#">Best-Sellers</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-8">
+                            <div class="inner-shop-top-left">
+                                <div class="dropdown">
+                                    <button class="btn sorting-btn dropdown-toggle" type="button" data-toggle="dropdown">
+                                        Default Sorting<span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">Date</a></li>
+                                        <li><a href="#">Best Sale</a></li>
+                                        <li><a href="#">Rating</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-4">
+                            <div class="inner-shop-top-right">
+                                <ul>
+                                    <li class="active"><a href="#gried-view" data-toggle="tab" aria-expanded="false"><i class="fa fa-th-large"></i></a></li>
+                                    <li><a href="#list-view" data-toggle="tab" aria-expanded="true"><i class="fa fa-list"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row inner-section-space-top">
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active clear products-container" id="gried-view">
+                                @foreach (Book item in Model.Item2)
+                                {
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+                                        <div class="product-box1">
+                                            <ul class="product-social">
+                                                <li><a href="@Url.Action("AddToCart","ShoppingCart", new { id= item.ID })"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a></li>
+                                                <li><a href="#"><i class="fa fa-heart-o" aria-hidden="true"></i></a></li>
+                                                <li><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-eye" aria-hidden="true"></i></a></li>
+                                            </ul>
+                                            <div class="product-img-holder">
+                                                <a href="@Url.Action("ProductDetail","Home",new {id=item.ID })"><img class="img-responsive" src="~/Content/uploads/@item.ImagePath" alt="product"></a>
+                                            </div>
+                                            <div class="product-content-holder">
+                                                <h3><a href="@Url.Action("ProductDetail","Home",new {id=item.ID })">@item.Title</a></h3>
+                                                <span>@item.UnitPrice</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <!-- List Style -->
+                            <div role="tabpanel" class="tab-pane clear products-container" id="list-view">
+                                @foreach (Book item in Model.Item2)
+                                {
+                                    <div class="col-lg-12 col-md-12 col-sm-4 col-xs-12">
+                                        <div class="product-box2">
+                                            <div class="media">
+                                                <a class="pull-left" href="#">
+                                                    <img class="img-responsive" src="~/Content/uploads/@item.ImagePath" alt="product" />
+                                                </a>
+                                                <div class="media-body">
+                                                    <div class="product-box2-content">
+                                                        <h3><a href="#">@item.Title</a></h3>
+                                                        <span>$@item.UnitPrice</span>
+                                                        <p>Bag mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and .</p>
+                                                    </div>
+                                                    <ul class="product-box2-cart">
+                                                        <li><a href="@Url.Action("AddToCart","ShoppingCart", new { id= item.ID })">Add To Cart</a></li>
+                                                        <li><a href="#"><i class="fa fa-heart-o" aria-hidden="true"></i></a></li>
+                                                        <li><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-eye" aria-hidden="true"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <ul class="mypagination">
+                                <li class="active"><a href="#">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Shop Page Area End Here -->
+</div>
+<!-- Modal Dialog Box Start Here-->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-body">
+            <button type="button" class="close myclose" data-dismiss="modal">&times;</button>
+            <div class="product-details1-area">
+                <div class="product-details-info-area">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                            <div class="inner-product-details-left">
+                                <div class="tab-content">
+                                    <div id="metro-related1" class="tab-pane fade active in">
+                                        <a href="#"><img class="img-responsive" src="~/Content/img/product/product-details1.jpg" alt="single"></a>
+                                    </div>
+                                    <div id="metro-related2" class="tab-pane fade">
+                                        <a href="#"><img class="img-responsive" src="~/Content/img/product/product-details1.jpg" alt="single"></a>
+                                    </div>
+                                    <div id="metro-related3" class="tab-pane fade">
+                                        <a href="#"><img class="img-responsive" src="~/Content/img/product/product-details1.jpg" alt="single"></a>
+                                    </div>
+                                </div>
+                                <ul>
+                                    <li class="active">
+                                        <a aria-expanded="false" data-toggle="tab" href="#metro-related1"><img class="img-responsive" src="~/Content/img/product/product-details4.jpg" alt="related1"></a>
+                                    </li>
+                                    <li>
+                                        <a aria-expanded="false" data-toggle="tab" href="#metro-related2"><img class="img-responsive" src="~/Content/img/product/product-details4.jpg" alt="related2"></a>
+                                    </li>
+                                    <li>
+                                        <a aria-expanded="false" data-toggle="tab" href="#metro-related3"><img class="img-responsive" src="~/Content/img/product/product-details4.jpg" alt="related3"></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                            <div class="inner-product-details-right">
+                                <h3>Product Title Here</h3>
+                                <ul>
+                                    <li><i aria-hidden="true" class="fa fa-star"></i></li>
+                                    <li><i aria-hidden="true" class="fa fa-star"></i></li>
+                                    <li><i aria-hidden="true" class="fa fa-star"></i></li>
+                                    <li><i aria-hidden="true" class="fa fa-star"></i></li>
+                                    <li><i aria-hidden="true" class="fa fa-star"></i></li>
+                                </ul>
+                                <p class="price">$59.00</p>
+                                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tinc amet risus consectetur, non consectetur nisl finibus. Ut ac eros quis mi volutpat cursus vel non risus.</p>
+                                <div class="product-details-content">
+                                    <p><span>SKU:</span> 0010</p>
+                                    <p><span>Availability:</span> In stock</p>
+                                    <p><span>Category:</span> Demo Products</p>
+                                </div>
+                                <ul class="product-details-social">
+                                    <li>Share:</li>
+                                    <li><a href="#"><i aria-hidden="true" class="fa fa-facebook"></i></a></li>
+                                    <li><a href="#"><i aria-hidden="true" class="fa fa-twitter"></i></a></li>
+                                    <li><a href="#"><i aria-hidden="true" class="fa fa-linkedin"></i></a></li>
+                                    <li><a href="#"><i aria-hidden="true" class="fa fa-pinterest"></i></a></li>
+                                </ul>
+                                <ul class="inner-product-details-cart">
+                                    <li><a href="#">Add To Cart</a></li>
+                                    <li>
+                                        <div class="input-group quantity-holder" id="quantity-holder">
+                                            <input type="text" placeholder="1" value="1" class="form-control quantity-input" name="quantity">
+                                            <div class="input-group-btn-vertical">
+                                                <button type="button" class="btn btn-default quantity-plus"><i aria-hidden="true" class="fa fa-plus"></i></button>
+                                                <button type="button" class="btn btn-default quantity-minus"><i aria-hidden="true" class="fa fa-minus"></i></button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li><a href="#"><i class="fa fa-heart-o" aria-hidden="true"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn-services-shop-now" data-dismiss="modal">Close</a>
+        </div>
+    </div>
+</div>
+<!-- Modal Dialog Box End Here-->

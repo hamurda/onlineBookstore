@@ -1,0 +1,37 @@
+﻿@model StockDetail
+@{
+    ViewBag.Title = "UPdate";
+    Layout = "~/Areas/Employee/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Stock Update</h2>
+
+@using (Html.BeginForm("Update", "Dealer", FormMethod.Post))
+{
+    <div class="form-group">
+        <label for="Name">Title:</label>
+        @Html.DropDownListFor(m => m.BookID, (SelectList)ViewBag.BookID, "Select a Book", htmlAttributes: new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="Description">Description:</label>
+        @Html.DropDownListFor(m => m.DealerID, (SelectList)ViewBag.DealerID, "Select a Dealer", htmlAttributes: new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="Stock">Stock Quantity:</label>
+        @Html.EditorFor(m => m.UnitsInStock, new { htmlAttributes = new { type = "number", min = "0", max = short.MaxValue, @class = "form-control" } });
+    </div>
+    <button type="submit" class="btn btn-default">Save</button>
+    @Html.ActionLink("Cancel", "Index", "Category", new { @class = "btn btn-default" })
+
+    if (ViewBag.Message != null)
+    {
+        <div class="alert alert-primary" role="alert">
+            @ViewBag.Message
+        </div>
+    }
+
+}
+
+
+
+

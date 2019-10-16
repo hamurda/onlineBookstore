@@ -1,0 +1,40 @@
+﻿@model List<Publisher>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@Html.ActionLink("New Publisher", "Insert", "Publisher", null, new { @class = "btn btn-default" })
+<hr />
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Company Name</th>
+            <th>Contact Name</th>
+            <th>Contact Title</th>
+            <th>Email Address</th>
+            <th>Phone Number</th>
+            <th>Status</th>
+            <th>####</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Publisher item in Model)
+        {
+            <tr>
+                <td>@item.CompanyName</td>
+                <td>@item.ContactName</td>
+                <td>@item.ContactTitle</td>
+                <td>@(item.EmailAddress!=null ? item.EmailAddress:"-")</td>
+                <td>@(item.Phone!=null ? item.Phone:"-")</td>
+                <td>@item.Status</td>
+                <td>
+                    @Html.ActionLink("Update", "Update", "Publisher", new { id = item.ID }, new { @class = "btn btn-default" }) |
+                    @Html.ActionLink("Delete", "Delete", "Publisher", new { id = item.ID }, new { @class = "btn btn-default" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

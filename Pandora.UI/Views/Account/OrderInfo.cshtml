@@ -1,0 +1,19 @@
+﻿@model List<OrderDetail>
+@{
+    ViewBag.Title = "OrderInfo";
+    Layout = "~/Areas/Employee/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Order Info</h2>
+
+<div class="container">
+    @*<h1 style=" text-align:center; border-bottom:1px solid #808080 ">Order Info</h1>*@
+
+    @foreach (OrderDetail item in Model)
+    {
+        <p><label>Title: </label> @item.Book.Title</p>
+        <p><label>Quantity: </label> @item.Quantity</p>
+        <p><label>Total Price: </label> @(item.Quantity * item.UnitPrice)</p>
+    }
+</div>
+

@@ -1,0 +1,45 @@
+﻿@model List<Category>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@Html.ActionLink("New Category", "Insert", "Category", null, new { @class = "btn btn-default" })
+
+<hr />
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Superior Category</th>
+            <th>Status</th>
+            <th>####</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Category item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                @if (item.SubCategoryOf != null && item.ID!=item.SubCategoryOf)
+                {
+                    Category subc = Model.FirstOrDefault(m => m.ID == item.SubCategoryOf);
+                    <td>@subc.Name</td>
+                }
+                else
+                {
+                    <td>Main Category</td>
+                }
+                <td>@item.Status</td>
+                <td>
+                    @Html.ActionLink("Update", "Update", "Category", new { id = item.ID }, new { @class = "btn btn-default" }) |
+                    @Html.ActionLink("Delete", "Delete", "Category", new { id = item.ID }, new { @class = "btn btn-default" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

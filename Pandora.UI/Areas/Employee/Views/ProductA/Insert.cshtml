@@ -1,0 +1,165 @@
+﻿@model Book
+
+@{
+    ViewBag.Title = "Insert";
+}
+
+@section scripts{
+    <script >
+        $(document).ready(function () {
+            $("#btnSavePublisher").click(function () {
+                alert($("#txtCompany").val().toString);
+                $.ajax(
+                    {
+                        type: "POST", //HTTP POST Method
+                        url: "Employee/Publisher/Insert", // Controller/View
+                        data: { //Passing data
+                            CompanyName: $("#txtCompany").val(), //Reading text box values using Jquery
+                            ContactName: $("#txtContact").val(),
+                            ContactTitle: $("#ddlTitle").val()
+                        }
+                    });
+            });
+        });
+    </script>
+}
+
+<h2>Insert</h2>
+<hr />
+
+@using (Html.BeginForm("Insert", "ProductA", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <div class="form-group">
+                <label for="Title">Title:</label>
+                @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+            </div>
+            <div>
+                <label for="Author">Author:</label>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        @Html.DropDownListFor(m => m.AuthorID, (SelectList)ViewBag.AuthorID, "Author", htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#Insert">
+                            New Author
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="Category">Category:</label>
+                @Html.DropDownListFor(m => m.CategoryID, (SelectList)ViewBag.CategoryID, "Category", htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div>
+                <label for="Publisher">Publisher:</label>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        @Html.DropDownListFor(m => m.PublisherID, (SelectList)ViewBag.PublisherID, "Publisher", htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#InsertPublisher">
+                            New Publisher
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="UnitPrice">Unit Price:</label>
+                @Html.TextBoxFor(m => m.UnitPrice, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label for="image">Cover:</label>
+                <input type="file" name="pic" />
+            </div>
+            <button type="submit" class="btn btn-success">Save</button>
+            @Html.ActionLink("Cancel", "Index", "ProductA", new { @class = "btn btn-default" })
+
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert alert-primary" role="alert">
+                    @ViewBag.Message
+                </div>
+            }
+        </div>
+        <div class="form-group col-md-6">
+            <div class="form-group">
+                <label for="TranslatorName">Translator Name:</label>
+                @Html.DropDownListFor(m => m.TranslatorID, (SelectList)ViewBag.AuthorID, "Author", htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label for="MinPrice">MinPrice:</label>
+                @Html.TextBoxFor(m => m.MinUnitPrice, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label for="ReleaseDate">Release Date:</label>
+                @Html.TextBoxFor(m => m.PublicationDate, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+}
+
+<div class="modal fade" id="Insert" tabindex="-1" role="dialog" aria-labelledby="">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">Enter a new author</h4>
+            </div>
+            @using (Html.BeginForm("Insert", "Author", FormMethod.Post))
+            {
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>First Name:</label>
+                        @Html.TextBoxFor(m => m.Author.FirstName, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name:</label>
+                        @Html.TextBoxFor(m => m.Author.LastName, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-default">Save</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="InsertPublisher" tabindex="-1" role="dialog" aria-labelledby="">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">Enter a new publisher</h4>
+            </div>
+            @using (Html.BeginForm("Insert", "Publisher", FormMethod.Post))
+            {
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Company Name:</label>
+                        @Html.TextBoxFor(m => m.Publisher.CompanyName, new { @class = "form-control", @id = "txtCompany" })
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Name:</label>
+                        @Html.TextBoxFor(m => m.Publisher.ContactName, new { @class = "form-control", @id = "txtContact" })
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Title:</label>
+                        @Html.DropDownList("ContactTitle", EnumHelper.GetSelectList(typeof(ContactTitle)), "Contact Title", new { @class = "form-control", @id = "ddlTitle" })
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-default" id="btnSavePublisher">Save</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

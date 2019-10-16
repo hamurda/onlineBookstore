@@ -1,0 +1,48 @@
+﻿@model DealerAddressVM
+@{
+
+    ViewBag.Title = "Dealer Insert";
+}
+
+<h2>Dealer Insert</h2>
+<hr />
+
+@using (Html.BeginForm("Insert", "Dealer", FormMethod.Post))
+{
+    <div class="form-group">
+        <label for="Name">Name:</label>
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="Name">Phone:</label>
+        @Html.TextBoxFor(m => m.MainPhone, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="Name">Street:</label>
+        @Html.TextBoxFor(m => m.Street, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="Name">Postal Code:</label>
+        @Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="Name">City:</label>
+        @Html.DropDownListFor(m => m.CityID, (SelectList)ViewBag.CityID, "City Name", htmlAttributes: new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="Name">Country:</label>
+        @Html.DropDownListFor(m => m.CountryID, (SelectList)ViewBag.CountryID, "Country Name", htmlAttributes: new { @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-default">Save</button>
+    @Html.ActionLink("Cancel", "Index", "Dealer", new { @class = "btn btn-default" })
+
+    if (ViewBag.Message != null)
+    {
+        <div class="alert alert-primary" role="alert">
+            @ViewBag.Message
+        </div>
+    }
+}
+
+
+

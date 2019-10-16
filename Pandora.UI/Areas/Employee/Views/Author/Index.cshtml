@@ -1,0 +1,33 @@
+﻿@model List<Author>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@Html.ActionLink("New Author", "Insert", "Author", null, new { @class = "btn btn-default" })
+
+<hr />
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Status</th>
+            <th>####</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Author item in Model)
+        {
+            <tr>
+                <td>@item.FirstName @item.LastName</td>
+                <td>@item.Status</td>
+                <td>
+                    @Html.ActionLink("Update", "Update", "Author", new { id = item.ID }, new { @class = "btn btn-default" }) |
+                    @Html.ActionLink("Delete", "Delete", "Author", new { id = item.ID }, new { @class = "btn btn-default" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

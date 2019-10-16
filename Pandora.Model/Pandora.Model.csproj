@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{45F0A3BE-6C17-4455-9B43-9F04B615FB6C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Pandora.Model</RootNamespace>
+    <AssemblyName>Pandora.Model</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Context\ProjectContext.cs" />
+    <Compile Include="Entities\Address.cs" />
+    <Compile Include="Entities\Book.cs" />
+    <Compile Include="Entities\Category.cs" />
+    <Compile Include="Entities\City.cs" />
+    <Compile Include="Entities\Country.cs" />
+    <Compile Include="Entities\Customer.cs" />
+    <Compile Include="Entities\Dealer.cs" />
+    <Compile Include="Entities\Employee.cs" />
+    <Compile Include="Entities\Enum\ContactTitle.cs" />
+    <Compile Include="Entities\Enum\Gender.cs" />
+    <Compile Include="Entities\Enum\Language.cs" />
+    <Compile Include="Entities\Enum\OrderStatus.cs" />
+    <Compile Include="Entities\Enum\TitleCourtesy.cs" />
+    <Compile Include="Entities\Order.cs" />
+    <Compile Include="Entities\OrderDetail.cs" />
+    <Compile Include="Entities\Publisher.cs" />
+    <Compile Include="Entities\ReadingList.cs" />
+    <Compile Include="Entities\ReadingListBook.cs" />
+    <Compile Include="Entities\Search.cs" />
+    <Compile Include="Entities\Shipper.cs" />
+    <Compile Include="Entities\StockDetail.cs" />
+    <Compile Include="Entities\Author.cs" />
+    <Compile Include="Map\AddressMap.cs" />
+    <Compile Include="Map\AuthorMap.cs" />
+    <Compile Include="Map\BookMap.cs" />
+    <Compile Include="Map\CategoryMap.cs" />
+    <Compile Include="Map\CityMap.cs" />
+    <Compile Include="Map\CountryMap.cs" />
+    <Compile Include="Map\CustomerMap.cs" />
+    <Compile Include="Map\DealerMap.cs" />
+    <Compile Include="Map\EmployeeMap.cs" />
+    <Compile Include="Map\OrderDetailMap.cs" />
+    <Compile Include="Map\OrderMap.cs" />
+    <Compile Include="Map\PublisherMap.cs" />
+    <Compile Include="Map\ReadingListBookMap.cs" />
+    <Compile Include="Map\ReadingListMap.cs" />
+    <Compile Include="Map\SearchMap.cs" />
+    <Compile Include="Map\ShipperMap.cs" />
+    <Compile Include="Map\StockDetailMap.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pandora.Core\Pandora.Core.csproj">
+      <Project>{f751778b-69bb-4e51-99ea-b3dee6cc6ebd}</Project>
+      <Name>Pandora.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

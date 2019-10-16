@@ -1,0 +1,84 @@
+﻿@model AddressVM
+@{
+    ViewBag.Title = "Insert";
+}
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#txtCity").hide();
+            $("#btnNewCity").click(function () {
+                $("#ddlCities").hide();
+                $("#txtCity").show();
+            });
+        });
+
+        $(document).ready(function () {
+            $("#txtCountry").hide();
+            $("#btnNewCountry").click(function () {
+                $("#ddlCountries").hide();
+                $("#txtCountry").show();
+            });
+        });
+    </script>
+}
+
+
+<h2>Adress Update</h2>
+<hr />
+
+@using (Html.BeginForm("Update", "Address", FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.AddressID)
+
+    <div class="form-group">
+        <label for="Street">Street Name:</label>
+        @Html.TextBoxFor(m => m.Street, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="PostalCode">Postal Code:</label>
+        @Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label for="CityName">City Name:</label>
+
+        <div id="ddlCities">
+            @Html.DropDownListFor(m => m.CityID, (SelectList)ViewBag.CityID, "City Name", htmlAttributes: new { @class = "form-control" })
+            <button type="button" class="btn btn-default" id="btnNewCity">New</button>
+        </div>
+
+        <div id="txtCity">
+            @Html.TextBoxFor(m => m.CityName, new { @class = "form-control" })
+        </div>
+
+    </div>
+    <div class="form-group">
+        <label for="CountryName">Country Name:</label>
+        <div id="ddlCountries">
+            @Html.DropDownListFor(m => m.CountryID, (SelectList)ViewBag.CountryID, "Country Name", htmlAttributes: new { @class = "form-control" })
+            <button type="button" class="btn btn-default" id="btnNewCountry">New</button>
+        </div>
+
+        <div id="txtCountry">
+            @Html.TextBoxFor(m => m.CountryName, new { @class = "form-control" })
+        </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-default">Save</button>
+    @Html.ActionLink("Cancel", "Index", "Address", new { @class = "btn btn-default" })
+
+    if (ViewBag.Message != null)
+    {
+        <div class="alert alert-primary" role="alert">
+            @ViewBag.Message
+        </div>
+    }
+
+}
+
+
+
+
+

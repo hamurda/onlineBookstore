@@ -1,0 +1,53 @@
+﻿@model List<Employee>
+@{
+    ViewBag.Title = "Employee Controller";
+}
+
+<h2>Employee Index</h2>
+
+@Html.ActionLink("New Employee", "Insert", "Employee", null, new { @class = "btn btn-default" })
+<hr />
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Title</th>
+            <th>Reports To</th>
+            <th>E-mail Address</th>
+            <th>Notes</th>
+            <th>Password</th>
+            <th>Status</th>
+            <th>####</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Employee item in Model)
+        {
+            <tr>
+                <td>@item.Username</td>
+                <td>@item.FirstName</td>
+                <td>@item.LastName</td>
+                <td>@item.Title</td>
+                @if (item.ReportsTo != null)
+                {
+                    <td>@item.EmployeeReportsTo.FirstName @item.EmployeeReportsTo.LastName</td>
+                }
+                else
+                {
+                    <td>-</td>
+                }
+                <td>@item.EmailAddress</td>
+                <td>@(item.Notes != null ? item.Notes : "-")</td>
+                <td>@(item.Password != null ? item.Password : "-")</td>
+                <td>@item.Status</td>
+                <td>
+                    @Html.ActionLink("Update", "Update", "Employee", new { id = item.ID }, new { @class = "btn btn-default" }) |
+                    @Html.ActionLink("Delete", "Delete", "Employee", new { id = item.ID }, new { @class = "btn btn-default" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table> 

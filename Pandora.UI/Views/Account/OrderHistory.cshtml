@@ -1,0 +1,204 @@
+﻿@model Tuple<List<Order>, List<OrderDetail>>
+
+@{
+    ViewBag.Title = "Order History";
+}
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[data-toggle="popover"]').popover({
+                title: setData,
+                html: true,
+                placement: 'right'
+            });
+
+            function setData(id) {
+                var set_data = '';
+                var element = $(this);
+                var id = element.attr("id");
+                $.ajax({
+                    url: '/Account/OrderInfo' + id;
+                    method: "GET",
+                    async: false,
+                    data: { id: id },
+                    success: function (data) {
+                        set_data = data;
+                    }
+                });
+                return set_data;
+            }
+        });
+    </script>
+}
+
+<!-- Inner Page Banner Area Start Here -->
+<div class="inner-page-banner-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="breadcrumb-area">
+                    <h1>Order History Page</h1>
+                    <ul>
+                        <li><a href="@Url.Action("Index","Home")">Home</a> /</li>
+                        <li>Order History</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Inner Page Banner Area End Here -->
+<!-- Order History Page Area Start Here -->
+<div class="order-history-page-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="order-history-page-top table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <td class="order-history-form-heading">Order Id</td>
+                                <td class="order-history-form-heading">Added Date</td>
+                                <td class="order-history-form-heading">Quantity</td>
+                                <td class="order-history-form-heading">Amount</td>
+                                <td class="order-history-form-heading">Status</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Order item in Model.Item1)
+                            {
+                                short? pieces = 0;
+                                decimal? price = 0;
+                                List<OrderDetail> details = item.OrderDetails;
+
+                                foreach (OrderDetail od in details)
+                                {
+                                    pieces += od.Quantity;
+                                    price += (od.UnitPrice * od.Quantity);
+                                }
+
+                                string orderNo = item.ID.ToString().Substring(0, 8).ToUpper();
+
+                                //Url.Action("OrderInfo","Account",new {id=item.ID })
+
+                                <tr>
+                                    <td><a href="#" id="@item.ID" data-toggle="popover" data-trigger="hover">#@orderNo<i class="fa fa-paperclip" aria-hidden="true"></i></a></td>
+                                    <td>@item.CreatedDate</td>
+                                    <td>@pieces Pcs</td>
+                                    <td>$@price</td>
+                                    @if (item.OrderStatus == OrderStatus.Pending)
+                                    {
+                                        <td class="pending">@item.OrderStatus</td>
+                                    }
+                                    else if (item.OrderStatus == OrderStatus.Processing)
+                                    {
+                                        <td class="processing">@item.OrderStatus</td>
+                                    }
+                                    else if (item.OrderStatus == OrderStatus.Cancelled)
+                                    {
+                                        <td class="canceled">@item.OrderStatus</td>
+                                    }
+                                    else if (item.OrderStatus == OrderStatus.Delivered)
+                                    {
+                                        <td class="complete">@item.OrderStatus</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.OrderStatus</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Order History Page Area End Here -->
+<!-- Advantage Area Start Here -->
+<div class="advantage1-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="advantage-area-box">
+                    <div class="media">
+                        <a class="pull-left" href="#">
+                            <i class="flaticon-truck"></i>
+                        </a>
+                        <div class="media-body">
+                            <h3>FREE SHIPPING</h3>
+                            <p>On All Orders</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="advantage-area-box">
+                    <div class="media">
+                        <a class="pull-left" href="#">
+                            <i class="flaticon-headphones"></i>
+                        </a>
+                        <div class="media-body">
+                            <h3>24/7 SERVICE</h3>
+                            <p>Get Help When You Need</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="advantage-area-box">
+                    <div class="media">
+                        <a class="pull-left" href="#">
+                            <i class="flaticon-reload"></i>
+                        </a>
+                        <div class="media-body">
+                            <h3>100% MONEY BACK</h3>
+                            <p>Within 30 Day Guarantee</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Advantage Area End Here -->
+<div class="modal fade" id="Check" tabindex="-1" role="dialog" aria-labelledby="">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Order Details</h4>
+                </div>
+                    <div class="modal-body">
+                        <div class="order-details-page-top table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <td class="order-details-form-heading">Product</td>
+                                        <td class="order-details-form-heading">Total</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (OrderDetail item in Model.Item2)
+                                    {                                      
+                                        <tr>
+                                            <td>@item.Book.Title X @item.Quantity</td>
+                                            <td>$@(item.Quantity * item.UnitPrice)</td>
+                                        </tr>
+                                    }
+                                    <tr>
+                                        <td><strong>Total</strong></td>
+                                        @*<td><strong>$@total</strong></td>*@
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                    </div>
+            </div>
+        </div>
+    </div>

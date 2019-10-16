@@ -1,0 +1,53 @@
+﻿@model List<Book>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@Html.ActionLink("New Book","Insert","ProductA",null,new { @class = "btn btn-default"})
+<hr />
+
+<table class="table table-hover" >
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Author</th>
+            <th>Category</th>
+            <th>Publisher</th>
+            <th>Unit Price</th>
+            <th>Image Path</th>
+            <th>Image</th>
+            <th>Status</th>
+            <th>####</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Book item in Model)
+        {
+        <tr>
+            <td>@item.Title</td>
+            @if (item.Author != null)
+            {
+                <td>@item.Author.AuthorLabel</td>
+            }
+            else
+            {
+                <td>-</td>
+            }
+            <td>@(item.Category!=null ? item.Category.Name : "-")</td>
+            <td>@(item.Publisher != null ? item.Publisher.CompanyName : "-")</td>
+            <td>@item.UnitPrice</td>
+            <td>@(item.ImagePath != null ? item.ImagePath : "-")</td>
+            <td><img src="@Url.Content("~/Content/uploads/" + item.ImagePath)" alt="IMAGES" style="width: 100px; height: 150px;" /></td>
+            <td>@item.Status</td>
+            <td>
+                @Html.ActionLink("Update", "Update", "ProductA", new { id = item.ID }, new { @class = "btn btn-default" }) |
+                @Html.ActionLink("Delete", "Delete", "ProductA", new { id = item.ID }, new { @class = "btn btn-default" })
+            </td>
+        </tr>
+        }
+    </tbody>
+</table> 
+

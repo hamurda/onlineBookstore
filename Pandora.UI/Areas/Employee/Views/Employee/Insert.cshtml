@@ -1,0 +1,50 @@
+﻿@model Employee
+@{
+
+    ViewBag.Title = "Employee Insert";
+}
+
+<h2>Employee Insert</h2>
+<hr />
+
+@using (Html.BeginForm("Insert", "Employee", FormMethod.Post))
+{
+    <div class="form-group">
+        <label for="Name">First Name:</label>
+        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="Name">Last Name:</label>
+        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="ContactTitle">Contact Title:</label>
+        @Html.DropDownList("Title", EnumHelper.GetSelectList(typeof(ContactTitle)), "Contact Title", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="ReportsTo">Reports To:</label>
+        @Html.DropDownListFor(m => m.ReportsTo, (SelectList)ViewBag.ReportsTo, "Reports To", htmlAttributes: new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="Description">Notes:</label>
+        @Html.TextAreaFor(m => m.Notes, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="Name">Password:</label>
+        @Html.TextBoxFor(m => m.Password, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="Name">IsAdmin:</label>
+        @Html.CheckBoxFor(m => m.IsAdmin, new { @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-default">Save</button>
+    @Html.ActionLink("Cancel", "Index", "Employee", new { @class = "btn btn-default" })
+
+    if (ViewBag.Message != null)
+    {
+        <div class="alert alert-primary" role="alert">
+            @ViewBag.Message
+        </div>
+    }
+}
+

@@ -1,0 +1,149 @@
+﻿@model List<CartProduct>
+@{
+    ViewBag.Title = "Order Details";
+
+    decimal? total = 0;
+
+    foreach (CartProduct item in Model)
+    {
+        total += (item.Quantity * item.Price);
+    }
+
+    Guid? orderID = ViewBag.OrderID;
+    string orderNo = orderID.ToString().Substring(0, 8).ToUpper();
+
+}
+
+<!-- Inner Page Banner Area Start Here -->
+<div class="inner-page-banner-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="breadcrumb-area">
+                    <h1>Order Details Page</h1>
+                    <ul>
+                        <li><a href="#">Home</a> /</li>
+                        <li>Order Details</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Inner Page Banner Area End Here -->
+<!-- Order Details Page Area Start Here -->
+<div class="order-details-page-area">
+    <div class="container">
+        <h2 class="order-details-page-title">Thank You. Your Order Has been Received.</h2>
+        <ul class="order-details-summery">
+            <li>Order Number:<span>@orderNo</span></li>
+            <li>Order Date:<span>@DateTime.Now</span></li>
+            <li>Email:<span> order@pandora.com</span></li>
+            <li>Total:<span>$@total</span></li>
+            <li>Shipper Company:<span>@ViewBag.ShipperName</span></li>
+        </ul>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h3>Order Details</h3>
+                <div class="order-details-page-top table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <td class="order-details-form-heading">Product</td>
+                                <td class="order-details-form-heading">Total</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (CartProduct item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Name X @item.Quantity</td>
+                                    <td>$@(item.Quantity * item.Price)</td>
+                                </tr>
+                            }
+                            <tr>
+                                <td><strong> Subtotals</strong></td>
+                                <td><strong> $@total</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Shipper Company</strong></td>
+                                <td><strong>@ViewBag.ShipperName </strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td><strong>$@total</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h3>Billing Address</h3>
+                <div class="order-details-page-bottom">
+                    <ul>
+                        @if (Session["customer"] != null)
+                        {
+                            Customer cus = (Customer)Session["customer"];
+
+                            <li><strong>Name:</strong> @cus.FirstName @cus.LastName</li>
+                            <li><strong>Address:</strong> @cus.ShippingAddress.Street @cus.ShippingAddress.PostalCode </li>
+                            <li><strong>Country:</strong> @cus.ShippingAddress.City.CityName @cus.ShippingAddress.City.Country.CountryName</li>
+                            <li><strong>Mail:</strong> @cus.EmailAddress</li>
+                            <li><strong>Phone:</strong> + 123 45678910</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Order Details Page Area End Here -->
+<!-- Advantage Area Start Here -->
+<div class="advantage1-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="advantage-area-box">
+                    <div class="media">
+                        <a class="pull-left" href="#">
+                            <i class="flaticon-truck"></i>
+                        </a>
+                        <div class="media-body">
+                            <h3>FREE SHIPPING</h3>
+                            <p>On All Orders</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="advantage-area-box">
+                    <div class="media">
+                        <a class="pull-left" href="#">
+                            <i class="flaticon-headphones"></i>
+                        </a>
+                        <div class="media-body">
+                            <h3>24/7 SERVICE</h3>
+                            <p>Get Help When You Need</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="advantage-area-box">
+                    <div class="media">
+                        <a class="pull-left" href="#">
+                            <i class="flaticon-reload"></i>
+                        </a>
+                        <div class="media-body">
+                            <h3>100% MONEY BACK</h3>
+                            <p>Within 30 Day Guarantee</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Advantage Area End Here -->

@@ -1,0 +1,187 @@
+﻿@model List<CartProduct>
+
+@{
+    ViewBag.Title = "View Cart";
+
+    decimal? total = 0;
+
+    if (Session["cart"] != null)
+    {
+        List<CartProduct> myCart = (List<CartProduct>)Session["cart"];
+        foreach (CartProduct item in myCart)
+        {
+            total += (item.Quantity * item.Price);
+        }
+    }
+}
+
+@section scripts{
+    <script type="text/javascript">
+
+        function RemoveOne(id) {
+            $.ajax({
+                url: '/ShoppingCart/RemoveOne/' + id + '',
+                type: 'Get',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8'
+            })
+        }
+
+        function AddToCart(id) {
+            $.ajax({
+                url: '/ShoppingCart/AddToCart/' + id + '',
+                type: 'Get',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8'
+            })
+        }
+
+    </script>
+
+
+}
+
+@*@section scripts{
+        <script type="text/javascript">
+            var i = $("#qntBox").val();
+            var price = parseFloat($("#priceBox").html().substr(1, 5).replace(',', '.')).toFixed(2);
+
+            $(document).ready(function () {
+                $("#btnPlus").click(
+                    function () {
+                        if (i >= 1 && i < 11) {
+                            $("#qntBox").text(i++);
+                            var subTotal = parseFloat((price * i)).toFixed(2);
+                            $("#subTotBox").text("$" + subTotal);
+                        }
+                    }
+                );
+
+                $("#btnMinus").click(
+                    function () {
+                        if (i>1) {
+                            $("#qntBox").text(i--);
+                            var subTotal = parseFloat((price * i)).toFixed(2);
+                            $("#subTotBox").text("$" + subTotal);
+                        }
+                    }
+                );
+
+            });
+
+        </script>
+    }*@
+<!-- Inner Page Banner Area Start Here -->
+<div class="inner-page-banner-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="breadcrumb-area">
+                    <h1>Cart Page</h1>
+                    <ul>
+                        <li><a href="@Url.Action("Index","Home")">Home</a> /</li>
+                        <li>Cart</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Inner Page Banner Area End Here -->
+<!-- Cart Page Area Start Here -->
+<div class="cart-page-area">
+    @if (Session["cart"] != null)
+    {
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="cart-page-top table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <td class="cart-form-heading"></td>
+                                    <td class="cart-form-heading">Product</td>
+                                    <td class="cart-form-heading">Price</td>
+                                    <td class="cart-form-heading">Quantity</td>
+                                    <td class="cart-form-heading">Total</td>
+                                    <td class="cart-form-heading"></td>
+                                </tr>
+                            </thead>
+                            <tbody id="quantity-holder">
+                                @foreach (CartProduct item in Model)
+                                {
+                                    <tr>
+                                        <td class="cart-img-holder">
+                                            <a href="@Url.Action("Product", "Home", new { id = item.ID })"><img src="~/Content/uploads/@item.ImagePath" alt="cart" class="img-responsive"></a>
+                                        </td>
+                                        <td>
+                                            <h3><a href="@Url.Action("Product", "Home", new { id = item.ID })">@item.Name</a></h3>
+                                        </td>
+                                        <td class="amount" id="priceBox">$@item.Price</td>
+                                        <td class="quantity">
+                                            <div class="input-group quantity-holder">
+                                                <input type="text" name='quantity' class="form-control quantity-input" id="qntBox" value="@item.Quantity" placeholder="1">
+                                                <div class="input-group-btn-vertical">
+                                                    @*@Url.Action("AddToCart", "ShoppingCart", new { id = item.ID })*@
+                                                    <a href="#">
+                                                        <button onclick="AddToCart('@item.ID')" class="btn btn-default quantity-plus" id="btnPlus" onclick="increase()" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                                    </a>
+                                                    @*@Url.Action("RemoveOne", "ShoppingCart", new { id = item.ID })*@
+                                                    <a href="#"><button onclick="RemoveOne('@item.ID')" class="btn btn-default quantity-minus" type="button" id="btnMinus"><i class="fa fa-minus" aria-hidden="true"></i></button></a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="amount" id="subTotBox">$@(item.Quantity * item.Price)</td>
+                                        <td class="dismiss"><a href="@Url.Action("Remove", "ShoppingCart", new { id = item.ID })"><i class="fa fa-times" aria-hidden="true"></i></a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        <div class="update-button">
+                            <button class="btn-apply-coupon disabled" type="submit" value="Login">Update Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    @*<div class="cart-page-bottom-left">
+                            <h2>Coupon</h2>
+                            <form method="post">
+                                <input type="text" id="coupon" name="coupon" placeholder="Enter your coupon code if you have one">
+                                <button value="Coupon" type="submit" class="btn-apply-coupon disabled">Apply Coupon</button>
+                            </form>
+                        </div>*@
+                </div>
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    <div class="cart-page-bottom-right">
+                        <h2>Total</h2>
+                        <h3>Subtotal<span>$ @total</span></h3>
+                        <h3>Total<span>$ @total</span></h3>
+                        <div class="proceed-button">
+                            <a href="@Url.Action("CheckOut","ShoppingCart")"><button class="btn-apply-coupon disabled" type="submit" value="Login">Proceed To Checkout</button></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="container">
+            <div class="alert alert-info">
+                <strong>Your basket is empty.</strong>
+            </div>
+        </div>
+    }
+    @if (ViewBag.Message != null)
+    {
+        <div class="container">
+            <div class="alert alert-info">
+                <strong>@ViewBag.Message</strong>
+            </div>
+        </div>
+    }
+</div>
+<!-- Cart Page Area End Here -->

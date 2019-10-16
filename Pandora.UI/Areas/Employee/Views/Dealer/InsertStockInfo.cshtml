@@ -1,0 +1,19 @@
+﻿@model List<StockDetail>
+@{
+    ViewBag.Title = "GetStockDetail";
+    Layout = "~/Areas/Employee/Views/Shared/_Layout.cshtml";
+}
+
+<h2>GetStockDetail</h2>
+
+
+
+<div class="container">
+    @*<h1 style=" text-align:center; border-bottom:1px solid #808080 ">Order Info</h1>*@
+
+    @foreach (StockDetail item in Model)
+    {
+        <p><label>Dealer: </label> @item.Dealer.Name</p>
+        <p><label>Quantity: </label> @item.UnitsInStock</p>
+    }
+</div>

@@ -1,0 +1,44 @@
+﻿@model List<Dealer>
+@{
+    ViewBag.Title = "Dealer Controller";
+}
+
+<h2>Dealer Index</h2>
+
+@Html.ActionLink("New Dealer", "Insert", "Dealer", null, new { @class = "btn btn-default" })
+<hr />
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Status</th>
+            <th>####</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Dealer item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.MainPhone</td>
+                @if (item.Address != null)
+                {
+                    <td>@item.Address.Street @item.Address.PostalCode @item.Address.City.CityName @item.Address.City.Country.CountryName</td>
+                }
+                else
+                {
+                    <td>-</td>
+                }
+                <td>@item.Status</td>
+                <td>
+                    @Html.ActionLink("Update", "Update", "Dealer", new { id = item.ID }, new { @class = "btn btn-default" }) |
+                    @Html.ActionLink("Delete", "Delete", "Dealer", new { id = item.ID }, new { @class = "btn btn-default" }) |
+                    @Html.ActionLink("Stock", "InsertStockInfo", "Dealer", new { id = item.ID }, new { @class = "btn btn-default" }) |
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

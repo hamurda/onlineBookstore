@@ -1,0 +1,244 @@
+﻿@model Tuple<Customer, List<Order>>
+
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[data-toggle="popover"]').popover({
+                title: setData,
+                html: true,
+                placement: 'right'
+            });
+
+            function setData(id) {
+                var set_data = '';
+                var element = $(this);
+                var id = element.attr("id");
+                $.ajax({
+                    //type: "GET",
+                    url: '/Account/OrderInfo/' + id,
+                    method: "post",
+                    async: false,
+                    data: { id: id },
+                    // contentType: "application/json;charset=utf-8",
+                    //  dataType: "json",
+                    success: function (data) {
+                        set_data = data;
+                    }
+                });
+                return set_data;
+        });
+    </script>
+}
+
+<!-- Inner Page Banner Area Start Here -->
+<div class="inner-page-banner-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="breadcrumb-area">
+                    <h1>Welcome @Model.Item1.FirstName</h1>
+                    <ul>
+                        <li><a href="@Url.Action("Index","Home")">Home</a> /</li>
+                        <li>My Account</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Inner Page Banner Area End Here -->
+<!-- My Account Page Area Start Here -->
+<div class="my-account-page-area">
+    <div class="container">
+        <div class="woocommerce">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                    <nav class="woocommerce-MyAccount-navigation">
+                        <ul>
+                            <li class="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--dashboard active"><a href="#dashboard" data-toggle="tab" aria-expanded="false">Dashboard</a></li>
+                            <li class="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--dashboard"><a href="#orders" data-toggle="tab" aria-expanded="false">Orders</a></li>
+                            <li class="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--dashboard"><a href="#addresses" data-toggle="tab" aria-expanded="false">Addresses</a></li>
+                            <li class="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--dashboard"><a href="#details" data-toggle="tab" aria-expanded="false">Account Details</a></li>
+                            <li class="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--dashboard"><a href="#logout" data-toggle="tab" aria-expanded="false">Logout</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                    <div class="tab-content">
+                        <div class="tab-pane fade active in" id="dashboard">
+                            <div class="woocommerce-MyAccount-content">
+                                <p>Hello <strong>@Model.Item1.Username</strong> (not <strong>@Model.Item1.Username</strong>? <a href="@Url.Action("Logout","Login")">Log out</a>)</p>
+                                <p>From your account dashboard you can view your <a href="#">recent orders</a>, manage your <a href="#">shipping and billing addresses</a> and <a href="#">edit your password and account details</a>.</p>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="orders">
+                            @if (Model.Item2 != null)
+                            {
+                                <div class="woocommerce-message">
+                                    <a class="woocommerce-Button button" href="@Url.Action("OrderHistory","Account")">Go order history</a>Click here for completed orders.
+                                </div>
+
+                                <div class="order-history-page-top table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <td class="order-history-form-heading">Order Id</td>
+                                                <td class="order-history-form-heading">Added Date</td>
+                                                <td class="order-history-form-heading">Status</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (Order item in Model.Item2)
+                                            {
+                                                string orderNo = item.ID.ToString().Substring(0, 8).ToUpper();
+                                                <tr>
+                                                    <td><a href="#" data-toggle="popup" data-trigger="hover" id="@item.ID">#@orderNo<i class="fa fa-paperclip" aria-hidden="true"></i></a></td>
+                                                    <td>@item.CreatedDate</td>
+                                                    <td class="pending">@item.OrderStatus</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            }
+                            else
+                            {
+                                <div class="woocommerce-message">
+                                    <a class="woocommerce-Button button" href="@Url.Action("Index","Home")">Go shop</a>No order has been made yet.
+                                </div>
+                            }
+                        </div>
+                        <div class="tab-pane fade" id="addresses">
+                            <div class="woocommerce-MyAccount-content wd-myaccount-content-wrapper">
+                                <p>
+                                    The following addresses will be used on the checkout page by default.
+                                </p>
+                                <div class="u-columns woocommerce-Addresses addresses">
+                                    <div class="woocommerce-Address">
+                                        @using (Html.BeginForm("EditAddress", "Account", new { form = 1 }, FormMethod.Post))
+                                        {
+                                            <header class="woocommerce-Address-title title">
+                                                <h3>Shipping address</h3>
+                                                @if (ViewBag.ship != null)
+                                                {
+                                                    <div class="text-success">
+                                                        <p>@ViewBag.ship</p>
+                                                    </div>
+                                                }
+                                                <a href="#" class="edit"><input type="submit" value="Edit" class="edit" /></a>
+                                            </header>
+                                            <address>
+                                                <div class="form-group">
+                                                    @Html.TextBox("street", null, new { @class = "form-control", @name = "street", @placeholder = "Street" })
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.TextBox("postCode", null, new { @class = "form-control", @name = "postCode", @placeholder = "Postal Code" })
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.DropDownList("CityID", null, "Select City", new { @class = "form-control" })
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.DropDownList("CountryID", null, "Select Country", new { @class = "form-control" })
+                                                </div>
+                                            </address>
+                                        }
+                                    </div>
+
+                                    <div class="woocommerce-Address">
+                                        @using (Html.BeginForm("EditAddress", "Account", new { form = 2 }, FormMethod.Post))
+                                        {
+                                            <header class="woocommerce-Address-title title">
+                                                <h3>Billing address</h3>
+                                                @if (ViewBag.bill != null)
+                                                {
+                                                    <div class="text-success">
+                                                        <p>@ViewBag.bill</p>
+                                                    </div>
+                                                }
+                                                <a href="#" class="edit"><input type="submit" value="Edit" class="edit" /></a>
+                                            </header>
+                                            <address>
+                                                <div class="form-group">
+                                                    @Html.TextBox("street", null, new { @class = "form-control", @name = "street", @placeholder = "Street" })
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.TextBox("postCode", null, new { @class = "form-control", @name = "postCode", @placeholder = "Postal Code" })
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.DropDownList("CityID", null, new { @class = "form-control", @placeholder = "Select City" })
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.DropDownList("CountryID", null, new { @class = "form-control", @placeholder = "Select Country" })
+                                                </div>
+                                            </address>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="details">
+                            <div class="woocommerce-MyAccount-content">
+                                <header class="row woocommerce-Address-title title">
+                                    <h3 class="col-xs-12 metro-title">ACCESS YOUR ACCOUNT</h3>
+                                </header>
+                                @using (Html.BeginForm("Update", "Account", FormMethod.Post, new { @class = "row woocommerce-EditAccountForm edit-account" }))
+                                {
+                                    <p class="col-md-6 col-sm-12 woocommerce-form-row woocommerce-form-row--first form-row form-row-first">
+                                        @Html.TextBox("firstName", Model.Item1.FirstName, new { @class = "woocommerce-Input woocommerce-Input--text input-text", @name = "firstName", @id = "account_first_name", @value = "", @placeholder = "" })
+                                    </p>
+                                    <p class="col-md-6 col-sm-12 woocommerce-form-row woocommerce-form-row--last form-row form-row-last">
+                                        @Html.TextBox("lastName", Model.Item1.LastName, new { @class = "woocommerce-Input woocommerce-Input--text input-text", @name = "lastName", @id = "account_last_name", @value = "", @placeholder = "Last Name" })
+                                    </p>
+                                    <div class="clear"></div>
+                                    <p class="col-xs-12 woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                                        @Html.TextBox("email", Model.Item1.EmailAddress, new { @type = "email", @class = "woocommerce-Input woocommerce-Input--email input-text", @name = "email", @id = "account_email", @value = "", @placeholder = "Email address" })
+                                    </p>
+                                    <fieldset class="col-xs-12">
+                                        <legend>Password change</legend>
+                                        <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                                            <label for="password_current">Current password (leave blank to leave unchanged)</label>
+                                            @Html.TextBox("password", Model.Item1.Password, new { @type = "password", @class = "woocommerce-Input woocommerce-Input--password input-text", @name = "password", @id = "password_current" })
+                                        </p>
+                                        <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                                            <label for="password_1">New password (leave blank to leave unchanged)</label>
+                                            @Html.TextBox("newPass", null, new { @type = "password", @class = "woocommerce-Input woocommerce-Input--password input-text", @name = "newPass", @id = "password_1" })
+                                        </p>
+                                        <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                                            <label for="password_2">Confirm new password</label>
+                                            @Html.TextBox("newPassRepeat", null, new { @type = "password", @class = "woocommerce-Input woocommerce-Input--password input-text", @name = "newPassRepeat", @id = "password_2" })
+                                        </p>
+                                    </fieldset>
+                                    <div class="clear"></div>
+                                    <p class="col-xs-12">
+                                        <input type="hidden" id="_wpnonce" name="_wpnonce" value="96df2c51c6"><input type="hidden" name="_wp_http_referer" value="/my-account/edit-account/">       <input type="submit" class="woocommerce-Button button btn-shop-now-fill" name="save_account_details" value="Save changes">
+                                        <input type="hidden" name="action" value="save_account_details">
+                                    </p>
+
+                                    if (ViewBag.Pass != null)
+                                    {
+                                        <div class="alert alert-info">
+                                            <strong>@ViewBag.Pass</strong>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="logout">
+                            <div class="woocommerce-message">Are you sure you want to log out? <a href="@Url.Action("Logout", "Login")">Confirm and log out</a></div>
+                            <div class="woocommerce-MyAccount-content wd-myaccount-content-wrapper">
+                                <p>Hello <strong>@Model.Item1.Username</strong> (not <strong>@Model.Item1.Username</strong>? <a href="@Url.Action("Logout","Login")">Log out</a>)</p>
+                                <p>From your account dashboard you can view your <a href="#">recent orders</a>, manage your <a href="#">shipping and billing addresses</a> and <a href="#">edit your password and account details</a>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- My Account Page Area End Here -->

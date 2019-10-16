@@ -1,0 +1,75 @@
+﻿@model List<Book>
+
+@{
+    ViewBag.Title = "Stock Index";
+    Layout = "~/Areas/Employee/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[data-toggle="popover"]').popover({
+                title: setData,
+                html: true,
+                placement: 'right'
+            });
+
+            function setData(id) {
+                var set_data = '';
+                var element = $(this);
+                var id = element.attr("id");
+                $.ajax({
+                    url: location.origin + "Employee/Stock/GetStockDetail",           
+                    method: "GET",
+                    async: false,
+                    data: { id: id },
+                    success: function (data) {
+                        set_data = data;
+                    }
+                });
+                return set_data;
+            }
+        });
+    </script>
+}
+
+<h2>Stock Index</h2>
+
+@Html.ActionLink("New Dealer", "Insert", "Dealer", null, new { @class = "btn btn-default" })
+@Html.ActionLink("New Book", "Insert", "ProductA", null, new { @class = "btn btn-default" })
+<hr />
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Publisher</th>
+            <th>Total Stock</th>
+            <th>Status</th>
+            <th>####</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Book item in Model)
+        {
+            int? stock = 0;
+            foreach (StockDetail itemS in item.StockDetails)
+            {
+                stock += itemS.UnitsInStock;
+            }
+
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Author.AuthorLabel</td>
+                <td>@item.Publisher.CompanyName</td>
+                <td><a href="#" id="@item.ID" data-toggle="popover" data-trigger="hover">@stock</td>
+                <td>@item.Status</td>
+                <td>
+                    @Html.ActionLink("Update", "Update", "Stock", new { id = item.ID }, new { @class = "btn btn-default" }) |
+                    @Html.ActionLink("Delete", "Delete", "Stock", new { id = item.ID }, new { @class = "btn btn-default" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table> 
